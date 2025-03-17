@@ -6,90 +6,87 @@
 #include <UniversalTelegramBot.h>
 #include <ArduinoJson.h>
 
-// تعريف العناصر الرئيسية
+// EDIT: Replace with your own port number
 WebServer server(80);
 File uploadFile;
 
-// إعدادات الواي فاي
-const char* ssid = "Mayar2.4";
-const char* password = "01009059591@mayar";
+// EDIT: Replace with your own WiFi credentials
+const char* ssid = "PUT_YOUR_WIFI";
+const char* password = "PUT_YOUR_PASSWORD";
 
-// إعدادات بوت تليجرام
-#define BOT_TOKEN "7674908219:AAH4dHQ2vFL8qByqfZ4NyJ8gR9dAptQq384"
-#define CHAT_ID "-1002544571276"
+// EDIT: Replace with your own Telegram bot token and chat ID
+#define BOT_TOKEN "PUT_YOUR_BOT_TOKEN_HERE"
+#define CHAT_ID "PUT_YOUR_CHAT_ID_HERE"
 
-// تعريف عميل آمن للاتصال بتليجرام
+
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(BOT_TOKEN, secured_client);
 
-// تعريف دبوس الاتصال بوحدة SD
 #define SD_CS 5
 
-// ملف تخزين بيانات المستخدمين
 const char* USERS_FILE = "/users.json";
 
 void setup() {
   Serial.begin(115200);
   Serial.println("بدء تشغيل النظام...");
 
-  // بدء تشغيل وحدة SD
-  Serial.print("تهيئة وحدة SD... ");
+  Serial.print("sd card initializing... ");
   if (!SD.begin(SD_CS)) {
-    Serial.println("فشل في تهيئة وحدة SD!");
+    Serial.println("failed to initialize sd card!");
     return;
   }
-  Serial.println("تم تهيئة وحدة SD بنجاح!");
+  Serial.println("sd card has been initialized successfully!");
 
-  // إنشاء ملف المستخدمين إذا لم يكن موجودًا
+  
   if (!SD.exists(USERS_FILE)) {
     File usersFile = SD.open(USERS_FILE, FILE_WRITE);
     if (usersFile) {
-      // إنشاء مصفوفة JSON فارغة
+      
       usersFile.println("[]");
       usersFile.close();
-      Serial.println("تم إنشاء ملف المستخدمين بنجاح!");
+      Serial.println("users file has been created successfully!");
     } else {
-      Serial.println("فشل في إنشاء ملف المستخدمين!");
+      Serial.println("failed to create users file!");
     }
   } else {
-    Serial.println("ملف المستخدمين موجود مسبقًا!");
+    Serial.println("users file already exists!");
   }
 
-  // بدء الاتصال بالواي فاي
-  Serial.print("الاتصال بشبكة الواي فاي... ");
+
+  Serial.print("connecting to the WiFi network... ");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("");
-  Serial.println("تم الاتصال بنجاح!");
-  Serial.print("عنوان IP الخاص بالجهاز: ");
+  Serial.println("successfull connection to the WiFi network!");
+  Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
 
-  // تخطي شهادة SSL للاتصال بتليجرام
+  
   secured_client.setCACert(TELEGRAM_CERTIFICATE_ROOT);
 
-  // إرسال رسالة تأكيد الاتصال
-  bot.sendMessage(CHAT_ID, "تم تشغيل خادم الويب على ESP32\nعنوان IP: " + WiFi.localIP().toString(), "");
-  Serial.println("تم إرسال رسالة تأكيد الاتصال إلى تليجرام!");
+  
+  bot.sendMessage(CHAT_ID, "The ESP-32 ip address is: " + WiFi.localIP().toString(), "");
+  Serial.println("a message has been sent to Telegram!");
 
-  // تعريف مسارات الخادم
+  
   server.on("/", HTTP_GET, handleRoot);
   server.on("/login", HTTP_POST, handleLogin);
   server.on("/register", HTTP_POST, handleRegister);
   server.onNotFound(handleNotFound);
   
-  // بدء تشغيل الخادم
+  
   server.begin();
-  Serial.println("تم تشغيل خادم الويب!");
+  Serial.println("server has successfully started!");
 }
 
 void loop() {
   server.handleClient();
 }
 
-// دالة للتعامل مع الصفحة الرئيسية
+
 void handleRoot() {
   String ip = server.client().remoteIP().toString();
   String userAgent = server.header("User-Agent");
@@ -106,7 +103,7 @@ void handleRoot() {
   bot.sendMessage(CHAT_ID, message, "");
   Serial.println("Visitor info sent to Telegram!");
   
-  // عرض صفحة الويب من بطاقة SD
+  
   File file = SD.open("/index.html", FILE_READ);
   if (!file) {
     server.send(404, "text/plain", "ملف غير موجود!");
@@ -119,7 +116,7 @@ void handleRoot() {
   Serial.println("تم عرض صفحة index.html بنجاح!");
 }
 
-// دالة للتعامل مع طلبات تسجيل الدخول
+
 void handleLogin() {
   String email = server.arg("email");
   String password = server.arg("password");
@@ -181,9 +178,9 @@ void handleRegister() {
   }
 }
 
-// دالة للتعامل مع الملفات الأخرى (CSS, JS)
+
 void handleNotFound() {
-  // تحقق مما إذا كان الملف المطلوب موجودًا على بطاقة SD
+
   String path = server.uri();
   Serial.println("طلب الملف: " + path);
   
@@ -193,7 +190,7 @@ void handleNotFound() {
   
   String contentType = getContentType(path);
   
-  // إضافة "/" في البداية إذا لم يكن موجودًا
+
   if (path.charAt(0) != '/') {
     path = "/" + path;
   }
@@ -209,7 +206,7 @@ void handleNotFound() {
   }
 }
 
-// دالة لتحديد نوع المحتوى بناءً على امتداد الملف
+
 String getContentType(String filename) {
   if (filename.endsWith(".html")) return "text/html";
   else if (filename.endsWith(".css")) return "text/css";
@@ -221,47 +218,47 @@ String getContentType(String filename) {
   return "text/plain";
 }
 
-// دالة للتحقق من وجود المستخدم
+
 bool userExists(String email) {
   File usersFile = SD.open(USERS_FILE, FILE_READ);
   if (!usersFile) {
-    Serial.println("فشل في فتح ملف المستخدمين للقراءة!");
+    Serial.println("failed to open users file for reading!");
     return false;
   }
   
-  DynamicJsonDocument doc(16384); // تخصيص حجم كافي للوثيقة
+  DynamicJsonDocument doc(16384);
   DeserializationError error = deserializeJson(doc, usersFile);
   usersFile.close();
   
   if (error) {
-    Serial.print("فشل في تحليل ملف المستخدمين: ");
+    Serial.print("failed to parse users file: ");
     Serial.println(error.c_str());
     return false;
   }
   
   JsonArray users = doc.as<JsonArray>();
   for (JsonObject user : users) {
-    if (user["username"] == email) {  // Check email instead of username
+    if (user["username"] == email) {  
       return true;
     }
   }
   return false;
 }
 
-// دالة للتحقق من صحة بيانات المستخدم
+
 bool verifyUser(String email, String password) {
   File usersFile = SD.open(USERS_FILE, FILE_READ);
   if (!usersFile) {
-    Serial.println("فشل في فتح ملف المستخدمين للقراءة!");
+    Serial.println("failed to open users file for reading!");
     return false;
   }
   
-  DynamicJsonDocument doc(16384); // تخصيص حجم كافي للوثيقة
+  DynamicJsonDocument doc(16384); 
   DeserializationError error = deserializeJson(doc, usersFile);
   usersFile.close();
   
   if (error) {
-    Serial.print("فشل في تحليل ملف المستخدمين: ");
+    Serial.print("failed to parse users file: ");
     Serial.println(error.c_str());
     return false;
   }
@@ -275,29 +272,28 @@ bool verifyUser(String email, String password) {
   return false;
 }
 
-// دالة لإضافة مستخدم جديد
 bool addUser(String username, String password, String email) {
-  // قراءة ملف المستخدمين الحالي
+  
   File usersFile = SD.open(USERS_FILE, FILE_READ);
   if (!usersFile) {
-    Serial.println("فشل في فتح ملف المستخدمين للقراءة!");
+    Serial.println("failed to open users file for reading!");
     return false;
   }
   
-  DynamicJsonDocument doc(16384); // تخصيص حجم كافي للوثيقة
+  DynamicJsonDocument doc(16384); 
   DeserializationError error = deserializeJson(doc, usersFile);
   usersFile.close();
   
   if (error) {
-    Serial.print("فشل في تحليل ملف المستخدمين: ");
+    Serial.print("failed to parse users file: ");
     Serial.println(error.c_str());
     
-    // إذا كان الملف فارغًا أو به خطأ، قم بإنشاء مصفوفة جديدة
+    
     doc.clear();
     doc.to<JsonArray>();
   }
   
-  // إضافة المستخدم الجديد
+
   JsonArray users = doc.as<JsonArray>();
   JsonObject newUser = users.createNestedObject();
   newUser["username"] = username;
@@ -306,32 +302,32 @@ bool addUser(String username, String password, String email) {
   newUser["registered_at"] = millis() / 1000;
   newUser["ip"] = server.client().remoteIP().toString();
   
-  // كتابة البيانات المحدثة إلى الملف
-  SD.remove(USERS_FILE); // حذف الملف القديم
+
+  SD.remove(USERS_FILE);
   File newUsersFile = SD.open(USERS_FILE, FILE_WRITE);
   if (!newUsersFile) {
-    Serial.println("فشل في فتح ملف المستخدمين للكتابة!");
+    Serial.println("failed to open users file for writing!");
     return false;
   }
   
   if (serializeJson(doc, newUsersFile) == 0) {
-    Serial.println("فشل في كتابة البيانات إلى ملف المستخدمين!");
+    Serial.println("failed to write to users file!");
     newUsersFile.close();
     return false;
   }
   
   newUsersFile.close();
-  Serial.println("تم إضافة المستخدم بنجاح!");
-  Serial.print("عدد المستخدمين الكلي: ");
+  Serial.println("user has been added successfully!");
+  Serial.print("total users: ");
   Serial.println(users.size());
   return true;
 }
 
-// دالة للحصول على قائمة جميع المستخدمين (يمكن إضافتها إذا كنت تريد عرض المستخدمين في لوحة تحكم المشرف)
+
 String getAllUsers() {
   File usersFile = SD.open(USERS_FILE, FILE_READ);
   if (!usersFile) {
-    Serial.println("فشل في فتح ملف المستخدمين للقراءة!");
+    Serial.println("failed to open users file for reading!");
     return "[]";
   }
   
