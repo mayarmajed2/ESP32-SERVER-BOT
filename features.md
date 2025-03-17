@@ -1,89 +1,89 @@
-# ميزات مشروع ESP32 Server Bot
+# ESP32 Server Bot Features
 
-يتضمن هذا المشروع العديد من الميزات المتقدمة التي تجعله نظامًا متكاملًا للتحكم عن بعد والمراقبة. فيما يلي شرح للميزات الرئيسية وفوائدها:
+This project includes several advanced features that make it a comprehensive remote control and monitoring system. Below is an explanation of the main features and their benefits:
 
-## 1. نظام المصادقة والأمان
+## 1. Authentication and Security System
 
-### إدارة المستخدمين
-- **التسجيل**: إمكانية إنشاء حسابات جديدة مع التحقق من عدم تكرار اسم المستخدم.
-- **تسجيل الدخول**: التحقق من بيانات المستخدم وإنشاء جلسة آمنة.
-- **إدارة الجلسات**: تخزين معلومات الجلسات وتتبع صلاحيتها.
-- **الفائدة**: حماية النظام من الوصول غير المصرح به وتوفير تجربة مخصصة لكل مستخدم.
+### User Management
+- **Registration**: Ability to create new accounts with checks for duplicate usernames.
+- **Login**: Verifying user credentials and establishing a secure session.
+- **Session Management**: Storing session information and tracking its validity.
+- **Benefit**: Protecting the system from unauthorized access and providing a personalized experience for each user.
 
-### تنظيف الجلسات منتهية الصلاحية
-- آلية تلقائية لتنظيف الجلسات منتهية الصلاحية كل 5 دقائق.
-- **الفائدة**: تحسين أداء النظام وتقليل استهلاك الذاكرة ومنع امتلاء مصفوفة الجلسات.
+### Expired Session Cleanup
+- Automatic cleanup of expired sessions every 5 minutes.
+- **Benefit**: Improves system performance, reduces memory consumption, and prevents session arrays from overflowing.
 
-### إعادة تعيين كلمة المرور
-- إمكانية طلب إعادة تعيين كلمة المرور عبر رابط مؤقت.
-- إرسال رابط إعادة التعيين عبر بوت التليجرام.
-- **الفائدة**: توفير طريقة آمنة لاستعادة الوصول إلى الحساب في حالة نسيان كلمة المرور.
+### Password Reset
+- Ability to request a password reset through a temporary link.
+- Sends the reset link via the Telegram bot.
+- **Benefit**: Provides a secure way to regain access to the account in case of forgotten passwords.
 
-## 2. جدولة المهام والتذكيرات
+## 2. Task Scheduling and Reminders
 
-### إنشاء المهام المجدولة
-- إمكانية إنشاء مهام مع تحديد وقت التنفيذ.
-- دعم التكرار اليومي أو الأسبوعي أو في أيام محددة.
-- **الفائدة**: أتمتة العمليات وضمان تنفيذها في الأوقات المحددة.
+### Scheduled Task Creation
+- Ability to create tasks with specified execution times.
+- Supports daily, weekly, or specific day repetitions.
+- **Benefit**: Automates processes and ensures execution at specified times.
 
-### التحقق التلقائي من المهام
-- فحص المهام المجدولة كل دقيقة للتحقق من وجود مهام يجب تنفيذها.
-- **الفائدة**: ضمان تنفيذ المهام في الوقت المحدد بدقة.
+### Automatic Task Checking
+- Check scheduled tasks every minute to determine if tasks need to be executed.
+- **Benefit**: Ensures tasks are executed on time accurately.
 
-### إدارة المهام
-- عرض وتعديل وحذف المهام المجدولة.
-- **الفائدة**: مرونة في إدارة المهام وتعديلها حسب الحاجة.
+### Task Management
+- Display, modify, and delete scheduled tasks.
+- **Benefit**: Provides flexibility in managing and adjusting tasks as needed.
 
-## 3. نظام الإشعارات
+## 3. Notification System
 
-### إشعارات التليجرام
-- إرسال إشعارات عبر بوت التليجرام للأحداث المهمة.
-- **الفائدة**: البقاء على اطلاع بالأحداث المهمة في النظام من أي مكان.
+### Telegram Notifications
+- Sends notifications via the Telegram bot for important events.
+- **Benefit**: Keeps you informed about important events from anywhere.
 
-### تخصيص الإشعارات
-- إمكانية تخصيص أنواع الإشعارات التي يرغب المستخدم في تلقيها.
-- **الفائدة**: تقليل الإشعارات غير الضرورية وتركيز الانتباه على الأحداث المهمة.
+### Notification Customization
+- Ability to customize the types of notifications the user wants to receive.
+- **Benefit**: Reduces unnecessary notifications and focuses attention on important events.
 
-### إشعارات الأمان
-- إشعارات خاصة بمحاولات تسجيل الدخول الفاشلة وتغييرات كلمة المرور.
-- **الفائدة**: تعزيز أمان النظام والكشف المبكر عن محاولات الاختراق.
+### Security Notifications
+- Notifications for failed login attempts and password changes.
+- **Benefit**: Enhances system security and provides early detection of potential intrusions.
 
-## 4. واجهة ويب متكاملة
+## 4. Integrated Web Interface
 
-### واجهة مستخدم سهلة الاستخدام
-- واجهة ويب بسيطة وسهلة الاستخدام للتحكم في النظام.
-- **الفائدة**: سهولة إدارة النظام من أي متصفح ويب.
+### Easy-to-Use Interface
+- A simple, user-friendly web interface for controlling the system.
+- **Benefit**: Makes system management easy from any web browser.
 
-### استجابة تلقائية
-- تصميم متجاوب يعمل على مختلف أحجام الشاشات.
-- **الفائدة**: إمكانية استخدام النظام من الهواتف والأجهزة اللوحية.
+### Responsive Design
+- A responsive design that works across various screen sizes.
+- **Benefit**: Enables system use from mobile devices and tablets.
 
-## 5. تخزين البيانات
+## 5. Data Storage
 
-### تخزين على بطاقة SD
-- تخزين جميع البيانات على بطاقة SD في ملفات JSON.
-- **الفائدة**: استمرارية البيانات حتى بعد إعادة تشغيل الجهاز.
+### SD Card Storage
+- All data is stored on an SD card in JSON files.
+- **Benefit**: Ensures data continuity even after the device is restarted.
 
-### نسخ احتياطي تلقائي
-- إمكانية إنشاء نسخ احتياطية للبيانات المهمة.
-- **الفائدة**: حماية البيانات من الفقدان في حالة تلف بطاقة SD.
+### Automatic Backup
+- Ability to create automatic backups of important data.
+- **Benefit**: Protects data from loss in case of SD card failure.
 
-## 6. مراقبة النظام
+## 6. System Monitoring
 
-### إشعارات بدء التشغيل
-- إرسال إشعار عند بدء تشغيل النظام مع معلومات عن عنوان IP والذاكرة المتاحة.
-- **الفائدة**: التأكد من أن النظام يعمل بشكل صحيح بعد إعادة التشغيل.
+### Startup Notifications
+- Sends a notification when the system starts with information about the IP address and available memory.
+- **Benefit**: Ensures the system is functioning correctly after a reboot.
 
-### مراقبة الموارد
-- مراقبة استخدام الذاكرة وأداء النظام.
-- **الفائدة**: اكتشاف المشكلات المحتملة قبل أن تؤثر على أداء النظام.
+### Resource Monitoring
+- Monitors memory usage and system performance.
+- **Benefit**: Detects potential issues before they affect system performance.
 
-## 7. التوافق والتوسعة
+## 7. Compatibility and Expandability
 
-### هيكل مشروع قابل للتوسعة
-- تنظيم الكود في وحدات منفصلة (auth, tasks, notifications, utils).
-- **الفائدة**: سهولة إضافة ميزات جديدة أو تعديل الميزات الحالية.
+### Modular Project Structure
+- Code is organized into separate modules (auth, tasks, notifications, utils).
+- **Benefit**: Makes it easy to add new features or modify existing ones.
 
-### توثيق شامل
-- توثيق كامل للكود والميزات وطريقة الاستخدام.
-- **الفائدة**: سهولة فهم النظام وصيانته وتطويره.
+### Comprehensive Documentation
+- Full documentation for the code, features, and usage.
+- **Benefit**: Makes it easy to understand, maintain, and develop the system.
